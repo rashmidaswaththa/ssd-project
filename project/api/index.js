@@ -16,7 +16,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(cors());
 app.use(express.json());
-app.use(helmet.hidePoweredBy()); // Disable X-Powered-By header
+app.use(helmet.hidePoweredBy()); 
 
 // mongoose.connect('mongodb+srv://rashmidaswaththa:8jEcVPDDbbdpCHqc@cluster0.qlbpdgl.mongodb.net/?retryWrites=true&w=majority');
 // database connection
