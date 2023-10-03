@@ -82,12 +82,20 @@ app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
     fs.renameSync(sourcePath, destPath);
 
     const { title, summary, content, author } = req.body;
+
+    // Convert specific properties to strings if necessary
+    const titleString = title.toString(); // toString conversion
+    const summaryString = summary.toString(); // toString conversion
+    const contentString = content.toString(); // toString conversion
+    const authorString = author.toString(); // toString conversion
+
+
     const postDoc = await Post.create({
-      title,
-      summary,
-      content,
+      title: titleString,
+      summary: summaryString,
+      content: contentString,
       cover: 'uploads/' + secureFilename,
-      author,
+      author: authorString,
     });
 
     res.json(postDoc);
@@ -121,36 +129,59 @@ app.get('/post/:id', async (req, res) => {
   }
 });
 
+// app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
+//   let newPath = null;
+//   if (req.file) {
+//     const { originalname, path } = req.file;
+//     const parts = originalname.split('.');
+//     const ext = parts[parts.length - 1];
+//     newPath = path + '.' + ext;
+//     fs.renameSync(path, newPath);
+//   }
+
+//   const { id, title, summary, content, author } = req.body;
+//   try {
+//     const postDoc = await Post.updateOne(
+//       id,
+//       {
+//         title,
+//         summary,
+//         content,
+//         cover: newPath ? newPath : postDoc.cover,
+//       },
+//       { new: true }
+//     );
+//     if (!postDoc) {
+//       return res.status(404).json({ message: 'Post not found' });
+//     }
+//     res.json(postDoc);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+
 app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
   let newPath = null;
   if (req.file) {
-    const { originalname, path } = req.file;
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    newPath = path + '.' + ext;
-    fs.renameSync(path, newPath);
+      const { originalname, path } = req.file;
+      const parts = originalname.split('.');
+      const ext = parts[parts.length - 1];
+      newPath = path + '.' + ext;
+      fs.renameSync(path, newPath);
   }
 
-  const { id, title, summary, content, author } = req.body;
-  try {
-    const postDoc = await Post.findByIdAndUpdate(
-      id,
-      {
-        title,
-        summary,
-        content,
-        cover: newPath ? newPath : postDoc.cover,
-      },
-      { new: true }
-    );
-    if (!postDoc) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    res.json(postDoc);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  const {id, title, summary, content , author } = req.body;
+  const postDoc = await Post.findById(id);
+  await postDoc.updateOne({
+      title,
+      summary,
+      content,
+      cover: newPath ? newPath : postDoc.cover,
+  });
+
+  res.json(postDoc);
+
 });
 
 app.listen(4000);
