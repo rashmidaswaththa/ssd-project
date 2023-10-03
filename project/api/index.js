@@ -1,3 +1,5 @@
+require("dotenv").config();
+const connection = require("./db");
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -16,7 +18,9 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet.hidePoweredBy()); // Disable X-Powered-By header
 
-mongoose.connect('mongodb+srv://rashmidaswaththa:8jEcVPDDbbdpCHqc@cluster0.qlbpdgl.mongodb.net/?retryWrites=true&w=majority');
+// mongoose.connect('mongodb+srv://rashmidaswaththa:8jEcVPDDbbdpCHqc@cluster0.qlbpdgl.mongodb.net/?retryWrites=true&w=majority');
+// database connection
+connection();
 
 // Function to generate a secure filename
 function generateSecureFilename(originalname) {
