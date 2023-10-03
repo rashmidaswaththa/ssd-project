@@ -34,6 +34,7 @@ export default function EditPost() {
     const response = await fetch('http://localhost:4000/post', {
       method: 'PUT',
       body: data,
+      credentials: 'include',
     });
     if (response.ok) {
       setRedirect(true);

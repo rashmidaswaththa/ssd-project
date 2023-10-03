@@ -48,7 +48,8 @@ export default function CreatePost() {
       const response = await fetch('http://localhost:4000/post', {
         method: 'POST',
         body: data,
-        headers, // Include CSRF token in headers
+        headers, 
+        credentials: 'include',// Include CSRF token in headers
       });
 
       if (response.ok) {
