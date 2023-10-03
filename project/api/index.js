@@ -45,10 +45,15 @@ app.use(limiter);
 
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
+
+  // Convert specific properties to strings if necessary
+  const usernameString = username.toString(); // toString conversion
+  const passwordString = password.toString(); // toString conversion
+
   try {
     const userDoc = await User.create({
-      username,
-      password: bcrypt.hashSync(password, salt), //password hashing
+      username: usernameString, // Use the converted usernameString
+      password: bcrypt.hashSync(passwordString, salt), // Use the converted passwordString and hash it
     });
     res.json(userDoc);
   } catch (e) {
@@ -59,10 +64,15 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
+  // Convert username and password to strings explicitly
+  const usernameString = username.toString();
+  const passwordString = password.toString();
+
   try {
-    const userDoc = await User.findOne({ username });
+    const userDoc = await User.findOne({ username: usernameString });
     if (userDoc) {
-      const passOk = bcrypt.compareSync(password, userDoc.password); //password hashing
+      const passOk = bcrypt.compareSync(passwordString, userDoc.password); //password hashing
       if (passOk) {
         // logged in
         res.json({ message: 'login success' });
