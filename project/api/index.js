@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet.hidePoweredBy()); 
 
-// mongoose.connect('mongodb+srv://rashmidaswaththa:8jEcVPDDbbdpCHqc@cluster0.qlbpdgl.mongodb.net/?retryWrites=true&w=majority');
+
 // database connection
 connection();
 
